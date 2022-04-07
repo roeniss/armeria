@@ -68,7 +68,7 @@ public final class ProxyService extends AbstractHttpService {
         return WebClient.builder(SessionProtocol.HTTP, healthCheckedGroup)
                         // Disable timeout to serve infinite streaming response.
                         .responseTimeoutMillis(0)
-                        .decorator(LoggingClient.newDecorator())
+//                        .decorator(LoggingClient.newDecorator())
                         .build();
     }
 

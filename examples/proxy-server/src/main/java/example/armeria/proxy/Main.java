@@ -14,7 +14,7 @@ public final class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
-        final Server backend1 = newBackendServer(8081, 500);
+        final Server backend1 = newBackendServer(8084, 500);
         final Server backend2 = newBackendServer(8082, 250);
         final Server backend3 = newBackendServer(8083, 100);
         // You can also remove the delay between frames completely as:
@@ -51,6 +51,10 @@ public final class Main {
                      // Disable timeout to serve infinite streaming response.
                      .requestTimeoutMillis(0)
                      // Serve /index.html file.
+                     .service("/favicon.ico", HttpFile.builder(Main.class.getClassLoader(), "favicon.ico")
+                                           .cacheControl(ServerCacheControl.REVALIDATED)
+                                           .build()
+                                           .asService())
                      .service("/", HttpFile.builder(Main.class.getClassLoader(), "index.html")
                                            .cacheControl(ServerCacheControl.REVALIDATED)
                                            .build()
@@ -64,8 +68,8 @@ public final class Main {
     static Server newProxyServer(int httpPort, int httpsPort) throws Exception {
         return Server.builder()
                      .http(httpPort)
-                     .https(httpsPort)
-                     .tlsSelfSigned()
+//                     .https(httpsPort)
+//                     .tlsSelfSigned()
                      // Disable timeout to serve infinite streaming response.
                      .requestTimeoutMillis(0)
                      .serviceUnder("/", new ProxyService())
